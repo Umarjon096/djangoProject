@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Второй этап</title>
+    <link rel="icon" href="{{ ikon }}" type="image/x-icon">
+ <style>
+        body {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f7f7f7;
+}
+
+         .nazad {
+             width: 200px;
+            display: inline-block;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 2rem;
+            font-family: Calibri, sans-serif;
+            background-color: #0072c6;
+            color: #fff;
+            border: none;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            transition: all 0.3s ease-in-out;
+            font-size: 2vw;
+        }
+
+        .nazad:hover {
+            background-color: #005daa;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16), 0 6px 12px rgba(0, 0, 0, 0.23);
+        }
+
+        .nazad:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+
+        img, video {
+        transition: filter 2s ease-out, transform 2s ease-out;
+        filter: brightness(100%);
+        margin: 0;
+        width: 320px;
+        height: 240px;
+      }
+
+      img:hover, video:hover {
+        filter: brightness(80%);
+        margin: 2px;
+        width: 316px;
+        height: 236px;
+      }
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+span {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-left: 40px;
+  margin-right: 40px;
+
+}
+
+table {
+  width: 60%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 5px;
+  text-align: center;
+  vertical-align: center;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f2f2f2;
+    text-align: center;
+}
+
+td.filename {
+  font-weight: bold;
+}
+
+td.video {
+  position: relative;
+}
+
+td.video .play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 1;
+}
+
+td.video .play-button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 30px solid #fff;
+}
+
+td.video .play-button:hover:before {
+  border-left-color: #f00;
+}
+
+td.carousel {
+  position: relative;
+}
+
+td.carousel .carousel-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+td.carousel .carousel-item.active {
+  opacity: 1;
+}
+
+td.carousel .prev-button,
+td.carousel .next-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+  transition: background-color 0.5s ease-in-out;
+}
+
+td.carousel .prev-button:hover,
+td.carousel .next-button:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+td.carousel .prev-button {
+  left: 0;
+}
+
+td.carousel .next-button {
+  right: 0;
+}
+
+button {
+    padding: 20px;
+}
+
+td.sek {
+    text-align: center !important;
+    vertical-align: center !important;
+}
+select, label {
+    font-size: 24px;
+    padding: 10px;
+}
+
+    </style>
+
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			var numSlides = {{ data.2.files.count }};
+			var currentSlide = 1;
+
+			function showSlide(slideNum) {
+                if (slideNum < 1) {
+					slideNum = 2;
+				}
+                if (slideNum > 2) {
+					slideNum = 1;
+				}
+                $('#slide-' + slideNum).fadeIn(100);
+                $('#slide-' + currentSlide).fadeOut(100);
+				currentSlide = slideNum;
+
+			}
+
+			$('.carousel-control-prev').click(function() {
+				var prevSlide = currentSlide - 1;
+				showSlide(prevSlide);
+			});
+
+			$('.carousel-control-next').click(function() {
+				var nextSlide = currentSlide + 1;
+				showSlide(nextSlide);
+			});
+
+			setInterval(function() {
+				var nextSlide = currentSlide + 1;
+				if (nextSlide > numSlides) {
+					nextSlide = 1;
+				}
+				showSlide(nextSlide);
+			}, {{ data.2.files.0.duration }}000);
+
+            $('#monitor-select').change(function() {
+                var monitorName = $(this).val();
+                console.log(monitorName)
+                switch (monitorName) {
+                case 'all':
+                    $('#tabl1').show();
+					$('#tabl2').show();
+					$('#tabl3').show();
+                    $('#myVideo').trigger('play');
+                    break;
+                case 'меню 1':
+                    $('#tabl1').show();
+					$('#tabl2').hide();
+					$('#tabl3').hide();
+                    $('#myVideo').trigger('play');
+                    break;
+                case 'меню 2':
+                    $('#tabl1').hide();
+					$('#tabl2').show();
+					$('#tabl3').hide();
+                    $('#myVideo').trigger('pause');
+                    break;
+                case 'реклама':
+                    $('#tabl1').hide();
+					$('#tabl2').hide();
+					$('#tabl3').show();
+                    $('#myVideo').trigger('pause');
+                    break;
+                }
+            });
+
+
+         $('#nazad1').click(function() {
+             window.location.href = '/';
+         });
+
+         $('#nazad2').click(function() {
+				window.location.href = '/etap1';
+         });
+		});
+
+
+	</script>
+</head>
+<body>
+
+    <div>
+        <label for="monitor-select">Выберите монитор:</label>
+        <select id="monitor-select">
+            <option value="all">Все</option>
+            {% for item in data %}
+                <option value="{{ item.name }}">{{ item.name }}</option>
+            {% endfor %}
+        </select>
+     <span>Мониторы ресторана</span>
+        <button class="nazad" id="nazad1">Главный</button>
+        <button class="nazad" id="nazad2"> Этап 1 </button>
+    </div>
+    <br>
+    <table border="1">
+		<tr>
+			<th>Имя монитора</th>
+			<th>Файл для возпроизведения</th>
+            <th>Интервал слайдшоу</th>
+        </tr>
+        {% for item in data %}
+			<tr id="tabl{{ item.files.0.id }}">
+				<td>{{ item.name }}</td>
+				{% if item.carousel %}
+					<td style="width: 30vw;">
+                    <div style="display: inline">
+							<button class="carousel-control-prev">&#8249;</button>
+						</div>
+						{% for file in item.files %}
+							{% if item.type == 'jpg' %}
+								{% if forloop.first %}
+									<img width="320" height="240" id="slide-1" src="{{ file.file }}" style="display: inline-block;">
+								{% else %}
+									<img width="320" height="240" id="slide-{{ forloop.counter }}" src="{{ file.file }}" style="display: none;">
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+						<div style="display: inline">
+							<button class="carousel-control-next">&#8250;</button>
+						</div>
+					</td>
+                    <td class="sek">
+                    15 cекунд
+                    </td>
+				{% else %}
+					<td>
+						{% for file in item.files %}
+							{% if item.type == 'mp4' %}
+								<video id="myVideo" width="320" height="240" controls preload autoplay loop>
+                                <source src="{{ file.file}}" type="video/mp4">
+                                </video>
+							{% else %}
+                                <img width="320" height="240" src="{{ file.file }}">
+                            {% endif %}
+						{% endfor %}
+					</td>
+                    <td class="sek"></td>
+                {% endif %}
+			</tr>
+		{% endfor %}
+	</table>
+</body>
+</html>
+

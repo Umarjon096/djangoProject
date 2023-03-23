@@ -1,0 +1,9 @@
+[
+ {
+ 'name': 'меню 1', 'files': <QuerySet [<File: File object (1)>]>, 'carousel': False
+ },
+ {'name': 'меню 2', 'files': <QuerySet [<File: File object (2)>]>, 'carousel': False
+ },
+ {'name': 'реклама', 'files': <QuerySet [<File: File object (3)>, <File: File object (4)>]>, 'carousel': True
+ },
+]
